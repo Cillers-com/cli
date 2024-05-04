@@ -3,8 +3,16 @@
 $verbose = ARGV.include?("--verbose")
 ARGV.delete("--verbose")
 
-require_relative 'src/commands/new'
-require_relative 'src/commands/help'
+require 'pathname'
+
+# Find the actual libexec directory
+libexec = Pathname.new(File.realpath(__FILE__)).dirname.parent + 'libexec'
+
+# Require files from libexec
+$LOAD_PATH.unshift(libexec.to_s)  # Add libexec to the load path
+
+require 'src/commands/new'
+require 'src/commands/help'
 
 command = ARGV.shift
 
