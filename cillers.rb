@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+VERSION = "0.0.3"
+
 $verbose = ARGV.include?("--verbose")
 ARGV.delete("--verbose")
 
@@ -13,6 +15,11 @@ $LOAD_PATH.unshift(libexec.to_s)  # Add libexec to the load path
 
 require 'src/commands/new'
 require 'src/commands/help'
+
+if ARGV.include?("--version")
+  puts "Cillers CLI version #{VERSION}"
+  exit
+end
 
 command = ARGV.shift
 
