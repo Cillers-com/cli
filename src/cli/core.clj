@@ -16,9 +16,15 @@
       (print-help))))
 
 (defn -main [& args]
-    (let [[command args options] (parse-argv (vec args))
-          ret (dispatch-command command args options)]
-      (when (return/error? ret)
-        (handle-error ret)))
+  (let [ret (parse-argv (vec args))]
+    (if (return/error? ret)
+      (handle-error ret)
+      (let [value (:value ret)
+            command (:command value)
+            args (:args value)
+            options (:options value)
+            ret (dispatch-command command args options)]
+        (when (return/error? ret)
+          (handle-error ret)))))
   (shutdown-agents))
 

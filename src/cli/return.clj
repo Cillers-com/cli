@@ -1,5 +1,12 @@
 (ns cli.return)
 
+(defn success
+  ([] 
+    {:code :success})
+  ([value] 
+    {:code :success
+     :value value}))
+
 (defn error [type, message]
   {:code :error 
    :type type 
@@ -25,13 +32,6 @@
 
 (defn process-execution-error [message]
   (error :process-execution-error message))
-
-(defn success
-  ([] 
-    {:code :success})
-  ([value] 
-    {:code :success
-     :value value}))
 
 (defn success? [ret]
   (= (:code ret) :success))
