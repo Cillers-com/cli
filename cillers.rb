@@ -1,40 +1,17 @@
 #!/usr/bin/env ruby
 
-VERSION = "0.0.3"
-
-$verbose = ARGV.include?("--verbose")
-ARGV.delete("--verbose")
-
 require 'pathname'
 
-# Find the actual libexec directory
-libexec = Pathname.new(File.realpath(__FILE__)).dirname.parent + 'libexec'
+require_relative './src/lib/argv_parser'
+require_relative './src/lib/execution'
 
-# Require files from libexec
-$LOAD_PATH.unshift(libexec.to_s)  # Add libexec to the load path
-
-require 'src/commands/new'
-require 'src/commands/help'
-
-if ARGV.include?("--version")
-  puts "Cillers CLI version #{VERSION}"
-  exit
+begin
+  command, args, options = ARGV_Parser::split_argv(ARGV)
+  Execution::dispatch_command(command, args, option)
+rescue ArgumentError => e
+  puts "Invalid arguments provided: #{e.message}" 
+rescue RuntimeError => e
+  puts "RuntimeError: #{e.message}"
+rescue
+  puts e.message
 end
-
-command = ARGV.shift
-
-case command
-when "new"
-  system_name = ARGV.shift
-  unless system_name
-    puts "Error: No system name provided." if $verbose
-    exit 1
-  end
-  Commands::New.execute(system_name, $verbose)
-when "help", nil  # Include 'nil' to show help when no command is provided
-  Commands::Help.display
-else
-  puts "Error: Unknown command '#{command}'" if $verbose
-  Commands::Help.display
-end
-
