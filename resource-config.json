@@ -1,0 +1,16 @@
+{
+  "resources": {
+    "includes": [
+      {"pattern": ".*\\.clj"},
+      {"pattern": ".*\\.properties"},
+      {"pattern": ".*\\.json"},
+      {"pattern": ".*\\.xml"},
+      {"pattern": "META-INF/services/.*"}
+    ],
+    "excludes": [
+      {"pattern": "META-INF/.*\\.SF"},
+      {"pattern": "META-INF/.*\\.DSA"},
+      {"pattern": "META-INF/.*\\.RSA"}
+    ]
+  }
+}

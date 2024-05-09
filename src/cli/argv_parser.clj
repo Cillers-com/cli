@@ -42,11 +42,19 @@
         (option? (nth argv idx)) idx
         :else (recur (inc idx))))))
 
+(defn vec-contains? [v item]
+  (reduce (fn [acc x] 
+            (if (= x item) 
+              (reduced true)
+              false))
+          false
+          v))
+
 (defn parse-argv [argv]
   ;; Allow help and version to be specified as options because that is common practice, but treat 
   ;; them as commands because that is more true to their semantics. 
-  (let [has-help-option (> (.indexOf argv "--help") -1)
-        has-version-option (> (.indexOf argv "--version") -1)]
+  (let [has-help-option (vec-contains? argv "--help")
+        has-version-option (vec-contains? argv "--version")]
     (cond 
       has-help-option (return/success {:command :help :args [] :options {}})
       has-version-option (return/success {:command :version :args [] :options {}})
