@@ -144,12 +144,12 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
-      - build-jar
-        filters:
-          tags:
-            only: /^v.*/
-          branches:
-            ignore: /.*/
+      - build-jar:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
       - build-linux-amd64:
           requires: 
             - build-jar
