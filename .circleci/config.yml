@@ -26,6 +26,7 @@ jobs:
       - run:
           name: Build JAR with Leiningen
           command: |
+            ls
             lein do clean, uberjar
       - persist_to_workspace:
           root: .
