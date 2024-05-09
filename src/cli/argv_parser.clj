@@ -20,7 +20,7 @@
   (reduce (fn [acc option]
             (let [option-key (keyword (.substring option 2))]
               (if (not (supported-option? option-key))
-                (reduced (return/error (str "Unsupported option: " option)))
+                (reduced (return/illegal-argument-error (str "Unsupported option: " option)))
                 (return/success (assoc (:value acc) option-key true)))))
           (return/success {})
           option-argv))
@@ -29,8 +29,8 @@
   (let [command (keyword (first command-argv))
         args (vec (rest command-argv))]
     (cond  
-      (not (first command-argv)) (return/error "No command provided")  
-      (not (supported-command? command)) (return/error (str "Unsupported command: " command))
+      (not (first command-argv)) (return/illegal-argument-error "No command provided")  
+      (not (supported-command? command)) (return/illegal-argument-error (str "Unsupported command: " command))
       :else (return/success {:command command :args args}))))  
 
 (defn index-of-first-option [argv]
@@ -48,8 +48,8 @@
   (let [has-help-option (> (.indexOf argv "--help") -1)
         has-version-option (> (.indexOf argv "--version") -1)]
     (cond 
-      has-help-option (return/success [:command :help :args [] :options {}])
-      has-version-option (return/success [:command :version :args [] :options {}])
+      has-help-option (return/success {:command :help :args [] :options {}})
+      has-version-option (return/success {:command :version :args [] :options {}})
       :else
       (let [idx (index-of-first-option argv)
             command-argv (take idx argv)
