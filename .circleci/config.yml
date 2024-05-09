@@ -58,7 +58,7 @@ jobs:
             -Dclojure.compiler.direct-linking=true
 
   build-linux-arm64:
-    executor: linux-executor
+    executor: linux-arm64-executor
     steps:
       - run:
           name: Setup GraalVM and Build Native Image (Linux ARM64)
