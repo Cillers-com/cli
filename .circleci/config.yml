@@ -31,6 +31,8 @@ jobs:
           root: .
           paths:
             - target/*standalone.jar
+            - reflection.json
+            - resource-config.json
 
   build-linux-amd64:
     executor: linux-amd64-executor
@@ -63,6 +65,8 @@ jobs:
   build-linux-arm64:
     executor: linux-arm64-executor
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Setup GraalVM and Build Native Image (Linux ARM64)
           command: |
@@ -89,6 +93,8 @@ jobs:
   build-macos-amd64:
     executor: macos-executor
     steps:
+      - attach_workspace:
+          at: .
       - macos/install-rosetta
       - run:
           name: Setup GraalVM and Build Native Image (macOS AMD64)
@@ -115,6 +121,8 @@ jobs:
   build-macos-arm64:
     executor: macos-executor
     steps:
+      - attach_workspace:
+          at: .
       - run:
           name: Setup GraalVM and Build Native Image (macOS ARM64)
           command: |
