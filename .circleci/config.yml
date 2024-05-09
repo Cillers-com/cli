@@ -127,25 +127,34 @@ jobs:
 workflows:
   build-and-deploy:
     jobs:
+      - build-jar
       - build-linux-amd64:
+          requires: 
+            - build-jar
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
       - build-linux-arm64:
+          requires: 
+            - build-jar
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
       - build-macos-amd64:
+          requires: 
+            - build-jar
           filters:
             tags:
               only: /^v.*/
             branches:
               ignore: /.*/
       - build-macos-arm64:
+          requires: 
+            - build-jar
           filters:
             tags:
               only: /^v.*/
