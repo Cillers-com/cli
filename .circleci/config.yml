@@ -26,12 +26,11 @@ jobs:
       - run:
           name: Build JAR with Leiningen
           command: |
-            ls
             lein do clean, uberjar
       - persist_to_workspace:
           root: .
           paths:
-            - target/uberjar/*standalone.jar
+            - target/*standalone.jar
 
   build-linux-amd64:
     executor: linux-amd64-executor

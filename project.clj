@@ -3,6 +3,6 @@
   :url "https://cillers.com"
   :dependencies [[org.clojure/clojure "1.11.1"]]
   :main ^:skip-aot cli.core
-  :target-path "target/%s"
+  :target-path "target"
   :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
