@@ -1,0 +1,171 @@
+version: 0.1
+
+orbs:
+  macos: circleci/macos@2.5.0
+
+executors:
+  linux-arm64-executor:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: arm.medium
+  linux-amd64-executor:
+    machine:
+      image: ubuntu-2004:current
+    resource_class: medium
+  macos-executor:
+    macos:
+      xcode: "14.2.0"
+    resource_class: macos.m1.medium.gen1
+        
+jobs:
+  build-jar:
+    docker:
+      - image: cimg/clojure:1.11.1
+    steps:
+      - checkout
+      - run:
+          name: Build JAR with Leiningen
+          command: |
+            lein do clean, uberjar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - target/uberjar/*standalone.jar
+
+  build-linux-amd64:
+    executor: linux-amd64-executor
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Setup GraalVM and Build Native Image (Linux AMD64)
+          command: |
+            sudo apt-get update
+            sudo apt-get install build-essential libz-dev zlib1g-dev
+            curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_linux-x64_bin.tar.gz | tar -xz
+            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
+            export PATH=$GRAALVM_HOME/bin:$PATH
+            native-image \
+            --no-fallback \
+            -jar target/uberjar/*-standalone.jar \
+            -H:Name=cillers-cli-linux-amd64 \
+            -H:ReflectionConfigurationFiles=reflection.json \
+            -H:ResourceConfigurationFiles=resource-config.json \
+            -H:+UnlockExperimentalVMOptions \
+            -H:+ReportExceptionStackTraces \
+            --report-unsupported-elements-at-runtime \
+            --initialize-at-build-time \
+            -Dclojure.compiler.direct-linking=true
+
+  build-linux-arm64:
+    executor: linux-executor
+    steps:
+      - run:
+          name: Setup GraalVM and Build Native Image (Linux ARM64)
+          command: |
+            sudo apt-get update
+            sudo apt-get install build-essential libz-dev zlib1g-dev
+            curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_linux-aarch64_bin.tar.gz | tar -xz
+            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
+            export PATH=$GRAALVM_HOME/bin:$PATH
+            native-image \
+            --no-fallback \
+            -jar target/uberjar/*-standalone.jar \
+            -H:Name=cillers-cli-linux-arm64 \
+            -H:ReflectionConfigurationFiles=reflection.json \
+            -H:ResourceConfigurationFiles=resource-config.json \
+            -H:+UnlockExperimentalVMOptions \
+            -H:+ReportExceptionStackTraces \
+            --report-unsupported-elements-at-runtime \
+            --initialize-at-build-time \
+            -Dclojure.compiler.direct-linking=true
+
+  build-macos-amd64:
+    executor: macos-executor
+    steps:
+      - macos/install-rosetta
+      - run:
+          name: Setup GraalVM and Build Native Image (macOS AMD64)
+          command: |
+            curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-x64_bin.tar.gz | tar -xz
+            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
+            export PATH=$GRAALVM_HOME/bin:$PATH
+            native-image --no-fallback -jar target/uberjar/cli-0.0.4-standalone.jar -H:Name=cli-macos-amd64
+            native-image \
+            --no-fallback \
+            -jar target/uberjar/*-standalone.jar \
+            -H:Name=cillers-cli-macos-amd64 \
+            -H:ReflectionConfigurationFiles=reflection.json \
+            -H:ResourceConfigurationFiles=resource-config.json \
+            -H:+UnlockExperimentalVMOptions \
+            -H:+ReportExceptionStackTraces \
+            --report-unsupported-elements-at-runtime \
+            --initialize-at-build-time \
+            -Dclojure.compiler.direct-linking=true
+
+  build-macos-arm64:
+    executor: macos-executor
+    steps:
+      - run:
+          name: Setup GraalVM and Build Native Image (macOS ARM64)
+          command: |
+            curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-aarch64_bin.tar.gz | tar -xz
+            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
+            export PATH=$GRAALVM_HOME/bin:$PATH
+            native-image \
+            --no-fallback \
+            -jar target/uberjar/*-standalone.jar \
+            -H:Name=cillers-cli-macos-arm64 \
+            -H:ReflectionConfigurationFiles=reflection.json \
+            -H:ResourceConfigurationFiles=resource-config.json \
+            -H:+UnlockExperimentalVMOptions \
+            -H:+ReportExceptionStackTraces \
+            --report-unsupported-elements-at-runtime \
+            --initialize-at-build-time \
+            -Dclojure.compiler.direct-linking=true
+
+  test-multi-arch:
+    parameters:
+      machine-type:
+        type: executor
+      executor: << parameters.machine-type >>
+      environment:
+        BRANCH: qemu-user-static
+        NAMESPACE: seleniarm
+    steps:
+      - run:  uname -a
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - test-multi-arch:
+          machine-type: linux-arm64-executor
+      - test-multi-arch:
+          machine-type: linux-amd64-executor
+      - test-multi-arch:
+          machine-type: macos-executor 
+      - build-linux-amd64:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - build-linux-arm64:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - build-macos-amd64:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - build-macos-arm64:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+
