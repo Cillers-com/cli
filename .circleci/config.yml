@@ -122,12 +122,10 @@ jobs:
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-aarch64_bin.tar.gz | tar -xz
             export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1/Contents/Home
             export PATH=$GRAALVM_HOME/bin:$PATH
-            ls $GRAALVM_HOME
-            ls $GRAALVM_HOME/bin
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
-            -H:Name=cillers-cli-macos-arm64 \
+            -H:Name=cillers-cli \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
@@ -135,23 +133,47 @@ jobs:
             --report-unsupported-elements-at-runtime \
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
+      - run:
+          name: Compress The Native Image And Rename It to Include Git Version Tag, OS and CPU
+          command: |
+            gzip cillers-cli
+            mv cillers-cli.gz "cillers-cli-$CIRCLE_TAG-macos-arm64.gz"
+      - store_artifacts:
+          path: cillers-cli-*.gz
 
 workflows:
   build-and-deploy:
     jobs:
       - build-jar
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
       - build-linux-amd64:
           requires: 
             - build-jar
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
       - build-linux-arm64:
           requires: 
             - build-jar
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
       - build-macos-amd64:
           requires: 
             - build-jar
-      - build-macos-arm64:
-          requires: 
-            - build-jar
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
       - build-macos-arm64:
           requires: 
             - build-jar
