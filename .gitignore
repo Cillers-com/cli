@@ -1,3 +1,4 @@
+# Clojure and Lein related files
 /target
 /classes
 /checkouts
@@ -11,3 +12,34 @@ pom.xml.asc
 /.prepl-port
 .hgignore
 .hg/
+
+# General for all environments
+.env
+*.tmp
+*.log
+._*
+
+# IDE / Editor directories
+.idea/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+.vscode/
+*.code-workspace
+.nbproject/
+*.tmproj
+.directory
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows system files
+.Thumbs.db
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+
