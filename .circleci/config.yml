@@ -97,9 +97,8 @@ jobs:
           name: Setup GraalVM and Build Native Image (macOS AMD64)
           command: |
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-x64_bin.tar.gz | tar -xz
-            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
+            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1/Contents/Home
             export PATH=$GRAALVM_HOME/bin:$PATH
-            native-image --no-fallback -jar target/cli-0.0.4-standalone.jar -H:Name=cli-macos-amd64
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
@@ -121,7 +120,7 @@ jobs:
           name: Setup GraalVM and Build Native Image (macOS ARM64)
           command: |
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-aarch64_bin.tar.gz | tar -xz
-            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
+            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1/Contents/Home
             export PATH=$GRAALVM_HOME/bin:$PATH
             ls $GRAALVM_HOME
             ls $GRAALVM_HOME/bin
