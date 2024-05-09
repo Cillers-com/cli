@@ -42,6 +42,7 @@ jobs:
           command: |
             pwd
             ls
+            ls target
             sudo apt-get update
             sudo apt-get install build-essential libz-dev zlib1g-dev
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_linux-x64_bin.tar.gz | tar -xz
@@ -67,6 +68,7 @@ jobs:
           command: |
             pwd
             ls
+            ls target
             sudo apt-get update
             sudo apt-get install build-essential libz-dev zlib1g-dev
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_linux-aarch64_bin.tar.gz | tar -xz
@@ -93,6 +95,7 @@ jobs:
           command: |
             pwd
             ls
+            ls target
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-x64_bin.tar.gz | tar -xz
             export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
             export PATH=$GRAALVM_HOME/bin:$PATH
@@ -117,6 +120,7 @@ jobs:
           command: |
             pwd
             ls
+            ls target
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-aarch64_bin.tar.gz | tar -xz
             export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
             export PATH=$GRAALVM_HOME/bin:$PATH
