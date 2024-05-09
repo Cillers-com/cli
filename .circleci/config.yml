@@ -47,7 +47,7 @@ jobs:
             export PATH=$GRAALVM_HOME/bin:$PATH
             native-image \
             --no-fallback \
-            -jar target/uberjar/*-standalone.jar \
+            -jar target/*-standalone.jar \
             -H:Name=cillers-cli-linux-amd64 \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
@@ -70,7 +70,7 @@ jobs:
             export PATH=$GRAALVM_HOME/bin:$PATH
             native-image \
             --no-fallback \
-            -jar target/uberjar/*-standalone.jar \
+            -jar target/*-standalone.jar \
             -H:Name=cillers-cli-linux-arm64 \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
@@ -90,10 +90,10 @@ jobs:
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-x64_bin.tar.gz | tar -xz
             export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
             export PATH=$GRAALVM_HOME/bin:$PATH
-            native-image --no-fallback -jar target/uberjar/cli-0.0.4-standalone.jar -H:Name=cli-macos-amd64
+            native-image --no-fallback -jar target/cli-0.0.4-standalone.jar -H:Name=cli-macos-amd64
             native-image \
             --no-fallback \
-            -jar target/uberjar/*-standalone.jar \
+            -jar target/*-standalone.jar \
             -H:Name=cillers-cli-macos-amd64 \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
@@ -114,7 +114,7 @@ jobs:
             export PATH=$GRAALVM_HOME/bin:$PATH
             native-image \
             --no-fallback \
-            -jar target/uberjar/*-standalone.jar \
+            -jar target/*-standalone.jar \
             -H:Name=cillers-cli-macos-arm64 \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
