@@ -44,20 +44,17 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Setup GraalVM
+          name: Build Native Image (Linux AMD64)
           command: |
             sudo apt-get update
             sudo apt-get install build-essential libz-dev zlib1g-dev
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_linux-x64_bin.tar.gz | tar -xz
             export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
             export PATH=$GRAALVM_HOME/bin:$PATH
-      - run: 
-          name: Build Native Image (Linux AMD64)
-          command: |
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
-            -H:Name=cillers-cli-linux-amd64 \
+            -H:Name=cillers-cli \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
@@ -81,7 +78,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Setup GraalVM and Build Native Image (Linux ARM64)
+          name: Build Native Image (Linux ARM64)
           command: |
             sudo apt-get update
             sudo apt-get install build-essential libz-dev zlib1g-dev
@@ -91,7 +88,7 @@ jobs:
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
-            -H:Name=cillers-cli-linux-arm64 \
+            -H:Name=cillers-cli \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
@@ -124,7 +121,7 @@ jobs:
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
-            -H:Name=cillers-cli-macos-amd64 \
+            -H:Name=cillers-cli \
             -H:ReflectionConfigurationFiles=reflection.json \
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
