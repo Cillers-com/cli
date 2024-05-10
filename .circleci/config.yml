@@ -153,17 +153,20 @@ jobs:
           name: Compress The Native Image
           command: |
             gzip cillers-cli
-      - run:
-          name: Install Google Cloud SDK
-          command: |
-            brew install --cask google-cloud-sdk
+            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+      - persist_to_workspace:
+          root: .
+          paths:
+            - cillers-cli-$CIRCLE_TAG-macos-arm64.gz
       - run:
           name: Upload Native Image to Google Artifact Registry
           command: |
+            brew install --cask google-cloud-sdk
+            gcloud --quiet config set core/disable_usage_reporting true
+            gcloud --quiet config set component_manager/disable_update_check true
             echo 'source "$(brew --prefix)/share/google-cloud-sdk/path.bash.inc"' >> $BASH_ENV
             source $BASH_ENV
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
-            gcloud config set project $GCLOUD_PROJECT_ID
             gsutil cp ./cillers-cli.gz gs://arched-inkwell-420116/cillers-cli/cillers-cli-$CIRCLE_TAG-linux-amd64.gz
       - store_artifacts:
           path: cillers-cli-$CIRCLE_TAG-macos-arm64.gz
