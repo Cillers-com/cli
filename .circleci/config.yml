@@ -184,7 +184,10 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
             gcloud config set project ${GCLOUD_PROJECT_ID}
-            gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-arm64.gz gs://arched-inkwell-420116/cillers-cli/cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-linux-amd64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-linux-amd64.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-linux-arm64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-linux-arm64.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-amd64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-amd64.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-arm64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-arm64.gz
 
 workflows:
   build-and-deploy:
@@ -200,7 +203,7 @@ workflows:
             - build-jar
           filters:
             tags:
-              only: /^vx.*/
+              only: /^v.*/
             branches:
               ignore: /.*/
       - build-linux-arm64:
@@ -208,7 +211,7 @@ workflows:
             - build-jar
           filters:
             tags:
-              only: /^vx.*/
+              only: /^v.*/
             branches:
               ignore: /.*/
       - build-macos-amd64:
@@ -216,7 +219,7 @@ workflows:
             - build-jar
           filters:
             tags:
-              only: /^vx.*/
+              only: /^v.*/
             branches:
               ignore: /.*/
       - build-macos-arm64:
@@ -229,6 +232,9 @@ workflows:
               ignore: /.*/
       - upload-to-gcloud:
           requires:
+            - build-linux-amd64
+            - build-linux-arm64
+            - build-macos-amd64
             - build-macos-arm64
           filters:
             tags:
