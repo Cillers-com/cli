@@ -66,7 +66,7 @@ jobs:
           name: Compress The Native Image
           command: |
             gzip cillers-cli
-            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-linux-amd64.gz
       - persist_to_workspace:
           root: .
           paths:
@@ -100,7 +100,7 @@ jobs:
           name: Compress The Native Image
           command: |
             gzip cillers-cli
-            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-linux-arm64.gz
       - persist_to_workspace:
           root: .
           paths:
@@ -195,6 +195,7 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+
       - build-linux-amd64:
           requires: 
             - build-jar
@@ -203,6 +204,7 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+
       - build-linux-arm64:
           requires: 
             - build-jar
@@ -211,6 +213,7 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+
       - build-macos-amd64:
           requires: 
             - build-jar
@@ -219,6 +222,7 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+
       - build-macos-arm64:
           requires: 
             - build-jar
@@ -227,6 +231,7 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+
       - upload-to-gcloud:
           requires:
             - build-linux-amd64
