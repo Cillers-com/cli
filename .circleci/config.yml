@@ -162,7 +162,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - cillers-cli-v0.0.4-ci-test16-macos-arm64.gz
+            - cillers-cli-*-macos-arm64.gz
 
   upload-to-gcloud:
     executor: gcloud-cli
@@ -173,7 +173,7 @@ jobs:
           name: Upload Native Image to Google Artifact Registry
           command: |
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
-            gcloud config set project ${GOOGLE_PROJECT_ID}
+            gcloud config set project ${GCLOUD_PROJECT_ID}
             gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-arm64.gz gs://arched-inkwell-420116/cillers-cli/cillers-cli-$CIRCLE_TAG-macos-arm64.gz
 
 workflows:
