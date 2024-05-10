@@ -160,8 +160,7 @@ jobs:
       - run:
           name: Upload Native Image to Google Artifact Registry
           command: |
-            echo 'source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc"' >> $BASH_ENV
-            echo 'source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc"' >> $BASH_ENV
+            echo 'source "$(brew --prefix)/share/google-cloud-sdk/path.bash.inc"' >> $BASH_ENV
             source $BASH_ENV
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
             gcloud config set project $GCLOUD_PROJECT_ID
