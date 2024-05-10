@@ -158,7 +158,6 @@ jobs:
           command: |
             gzip cillers-cli
             mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-macos-arm64.gz
-            ls
       - persist_to_workspace:
           root: .
           paths:
