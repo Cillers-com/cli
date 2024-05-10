@@ -217,7 +217,7 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
-      - upload-to-gcloud
+      - upload-to-gcloud:
           requires:
             - build-macos-arm64
 
