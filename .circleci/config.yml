@@ -220,5 +220,10 @@ workflows:
       - upload-to-gcloud:
           requires:
             - build-macos-arm64
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
 
 
