@@ -130,11 +130,11 @@ jobs:
           name: Setup GraalVM 
           command: |
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-aarch64_bin.tar.gz | tar -xz
-            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1/Contents/Home
-            export PATH=$GRAALVM_HOME/bin:$PATH
       - run:
           name: Build Native Image (macOS ARM64)
           command: |
+            export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1/Contents/Home
+            export PATH=$GRAALVM_HOME/bin:$PATH
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
