@@ -166,7 +166,7 @@ jobs:
 
   upload-to-gcloud:
     executor: gcloud-cli
-    steps
+    steps:
       - attach_workspace: 
           at: .
       - run: 
