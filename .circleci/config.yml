@@ -162,7 +162,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+            - cillers-cli-v0.0.4-ci-test16-macos-arm64.gz
 
   upload-to-gcloud:
     executor: gcloud-cli
@@ -190,7 +190,7 @@ workflows:
             - build-jar
           filters:
             tags:
-              only: /^v.*/
+              only: /^vx.*/
             branches:
               ignore: /.*/
       - build-linux-arm64:
@@ -198,7 +198,7 @@ workflows:
             - build-jar
           filters:
             tags:
-              only: /^v.*/
+              only: /^vx.*/
             branches:
               ignore: /.*/
       - build-macos-amd64:
@@ -206,7 +206,7 @@ workflows:
             - build-jar
           filters:
             tags:
-              only: /^v.*/
+              only: /^vx.*/
             branches:
               ignore: /.*/
       - build-macos-arm64:
