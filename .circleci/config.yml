@@ -164,7 +164,7 @@ jobs:
           paths:
             - cillers-cli-$CIRCLE_TAG-macos-arm64.gz
 
-  upload-to-gcloud
+  upload-to-gcloud:
     executor: gcloud-cli
     steps
       - attach_workspace: 
