@@ -7,11 +7,11 @@ executors:
   linux-arm64-executor:
     machine:
       image: ubuntu-2004:current
-    resource_class: arm.medium
+    resource_class: arm.large
   linux-amd64-executor:
     machine:
       image: ubuntu-2004:current
-    resource_class: medium
+    resource_class: large
   macos-executor:
     macos:
       xcode: "14.2.0"
@@ -40,13 +40,16 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Setup GraalVM and Build Native Image (Linux AMD64)
+          name: Setup GraalVM
           command: |
             sudo apt-get update
             sudo apt-get install build-essential libz-dev zlib1g-dev
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_linux-x64_bin.tar.gz | tar -xz
             export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1
             export PATH=$GRAALVM_HOME/bin:$PATH
+      - run: 
+          name: Build Native Image (Linux AMD64)
+          command: |
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
@@ -58,6 +61,13 @@ jobs:
             --report-unsupported-elements-at-runtime \
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
+      - run:
+          name: Push Native Image to Google Artifact Registry
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud auth configure-docker
+            docker tag cillers-cli-linux-amd64 us-central1-docker.pkg.dev/$GCLOUD_PROJECT_ID/my-repo/cillers-cli-linux-amd64:$CIRCLE_TAG
+            docker push us-central1-docker.pkg.dev/$GCLOUD_PROJECT_ID/my-repo/cillers-cli-linux-amd64:$CIRCLE_TAG
       - store_artifacts:
           path: cillers-cli-linux-amd64
           destination: cillers-cli-linux-amd64
@@ -117,11 +127,14 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Setup GraalVM and Build Native Image (macOS ARM64)
+          name: Setup GraalVM 
           command: |
             curl https://download.oracle.com/graalvm/22/latest/graalvm-jdk-22_macos-aarch64_bin.tar.gz | tar -xz
             export GRAALVM_HOME=$PWD/graalvm-jdk-22.0.1+8.1/Contents/Home
             export PATH=$GRAALVM_HOME/bin:$PATH
+      - run:
+          name: Build Native Image (macOS ARM64)
+          command: |
             native-image \
             --no-fallback \
             -jar target/*-standalone.jar \
@@ -134,13 +147,20 @@ jobs:
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
       - run:
-          name: Compress The Native Image And Rename It to Include Git Version Tag, OS and CPU
+          name: Compress The Native Image
           command: |
             gzip cillers-cli
-            mv cillers-cli.gz "cillers-cli-$CIRCLE_TAG-macos-arm64.gz"
-            ls
+      - run:
+          name: Authenticate with Google Cloud
+          command: |
+            echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
+            gcloud config set project $GCLOUD_PROJECT_ID
+      - run:
+          name: Upload Native Image to Google Artifact Registry
+          command: |
+            gsutil cp ./cillers-cli.gz gs://arched-inkwell-420116/cillers-cli/cillers-cli-$CIRCLE_TAG-linux-amd64.gz
       - store_artifacts:
-          path: cillers-cli-*.gz
+          path: cillers-cli-$CIRCLE_TAG-macos-arm64.gz
 
 workflows:
   build-and-deploy:
