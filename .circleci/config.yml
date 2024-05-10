@@ -130,6 +130,15 @@ jobs:
             --report-unsupported-elements-at-runtime \
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
+      - run:
+          name: Compress The Native Image
+          command: |
+            gzip cillers-cli
+            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-macos-amd64.gz
+      - persist_to_workspace:
+          root: .
+          paths:
+            - cillers-cli-*.gz
 
   build-macos-arm64:
     executor: macos-executor
@@ -161,7 +170,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - cillers-cli-*-macos-arm64.gz
+            - cillers-cli-*.gz
 
   upload-to-gcloud:
     executor: gcloud-cli
