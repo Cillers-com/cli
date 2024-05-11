@@ -65,8 +65,7 @@ jobs:
       - run:
           name: Compress The Native Image
           command: |
-            gzip cillers-cli
-            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-linux-amd64.gz
+            tar -czvf cillers-cli-$CIRCLE_TAG-linux-amd64.tar.gz cillers-cli
       - persist_to_workspace:
           root: .
           paths:
@@ -99,8 +98,7 @@ jobs:
       - run:
           name: Compress The Native Image
           command: |
-            gzip cillers-cli
-            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-linux-arm64.gz
+            tar -czvf cillers-cli-$CIRCLE_TAG-linux-arm64.tar.gz cillers-cli
       - persist_to_workspace:
           root: .
           paths:
@@ -132,8 +130,7 @@ jobs:
       - run:
           name: Compress The Native Image
           command: |
-            gzip cillers-cli
-            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-macos-amd64.gz
+            tar -czvf cillers-cli-$CIRCLE_TAG-macos-amd64.tar.gz cillers-cli
       - persist_to_workspace:
           root: .
           paths:
@@ -164,8 +161,7 @@ jobs:
       - run:
           name: Compress The Native Image
           command: |
-            gzip cillers-cli
-            mv cillers-cli.gz cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+            tar -czvf cillers-cli-$CIRCLE_TAG-macos-arm64.tar.gz cillers-cli
       - persist_to_workspace:
           root: .
           paths:
