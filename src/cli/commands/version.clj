@@ -3,11 +3,13 @@
             [cli.return :as return]))
 
 (defn get-version []
-  (let [project-file (slurp (io/file "project.clj"))
-        version-matcher #"defproject\s+\S+\s+\"([^\"]+)\""
-        matches (re-find version-matcher project-file)]
-    (assert (and matches (second matches)))
-    (return/success (second matches))))
+    "v0.0.10")
+
+;;(let [project-file (slurp (io/file "project.clj"))
+;;        version-matcher #"defproject\s+\S+\s+\"([^\"]+)\""
+;;        matches (re-find version-matcher project-file)]
+;;    (assert (and matches (second matches)))
+;;    (return/success (second matches))))
 
 (defn print-version [] 
   (let [ret (get-version)]
