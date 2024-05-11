@@ -7,11 +7,11 @@ executors:
   linux-arm64-executor:
     machine:
       image: ubuntu-2004:current
-    resource_class: arm.2xlarge
+    resource_class: arm.xlarge
   linux-amd64-executor:
     machine:
       image: ubuntu-2004:current
-    resource_class: 2xlarge
+    resource_class: xlarge
   macos-executor:
     macos:
       xcode: "14.2.0"
