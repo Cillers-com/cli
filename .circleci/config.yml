@@ -59,6 +59,7 @@ jobs:
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
             -H:+ReportExceptionStackTraces \
+            -H:+RemoveSaturatedTypeFlows \
             --report-unsupported-elements-at-runtime \
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
@@ -92,6 +93,7 @@ jobs:
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
             -H:+ReportExceptionStackTraces \
+            -H:+RemoveSaturatedTypeFlows \
             --report-unsupported-elements-at-runtime \
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
@@ -124,6 +126,7 @@ jobs:
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
             -H:+ReportExceptionStackTraces \
+            -H:+RemoveSaturatedTypeFlows \
             --report-unsupported-elements-at-runtime \
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
@@ -155,6 +158,7 @@ jobs:
             -H:ResourceConfigurationFiles=resource-config.json \
             -H:+UnlockExperimentalVMOptions \
             -H:+ReportExceptionStackTraces \
+            -H:+RemoveSaturatedTypeFlows \
             --report-unsupported-elements-at-runtime \
             --initialize-at-build-time \
             -Dclojure.compiler.direct-linking=true
