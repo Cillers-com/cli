@@ -7,15 +7,15 @@ executors:
   linux-arm64-executor:
     machine:
       image: ubuntu-2004:current
-    resource_class: arm.large
+    resource_class: arm.2xlarge
   linux-amd64-executor:
     machine:
       image: ubuntu-2004:current
-    resource_class: large
+    resource_class: 2xlarge
   macos-executor:
     macos:
       xcode: "14.2.0"
-    resource_class: macos.m1.medium.gen1
+    resource_class: macos.m1.large.gen1
   gcloud-cli:
     description: The official Google Docker image with gcloud SDK and CLI pre-installed.
     docker:
@@ -185,6 +185,8 @@ jobs:
             gsutil cp ./cillers-cli-$CIRCLE_TAG-linux-arm64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-linux-arm64.gz
             gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-amd64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-amd64.gz
             gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-arm64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+            shasum -a 256 cillers-cli-* >> shas.txt
+            echo shas.txt
 
 workflows:
   build-and-deploy:
