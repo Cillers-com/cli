@@ -7,7 +7,7 @@ executors:
   linux-arm64-executor:
     machine:
       image: ubuntu-2004:current
-    resource_class: arm.xlarge
+    resource_class: arm.large
   linux-amd64-executor:
     machine:
       image: ubuntu-2004:current
