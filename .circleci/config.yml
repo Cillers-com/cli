@@ -177,10 +177,10 @@ jobs:
           command: |
             echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
             gcloud config set project ${GCLOUD_PROJECT_ID}
-            gsutil cp ./cillers-cli-$CIRCLE_TAG-linux-amd64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-linux-amd64.gz
-            gsutil cp ./cillers-cli-$CIRCLE_TAG-linux-arm64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-linux-arm64.gz
-            gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-amd64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-amd64.gz
-            gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-arm64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-arm64.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-linux-amd64.tar.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-linux-amd64.tar.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-linux-arm64.tar.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-linux-arm64.tar.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-amd64.tar.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-amd64.tar.gz
+            gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-arm64.tar.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-arm64.tar.gz
             shasum -a 256 cillers-cli-* >> shas.txt
             cat shas.txt
 
