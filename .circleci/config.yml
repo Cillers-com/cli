@@ -186,7 +186,7 @@ jobs:
             gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-amd64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-amd64.gz
             gsutil cp ./cillers-cli-$CIRCLE_TAG-macos-arm64.gz gs://cillers-cli/cillers-cli-$CIRCLE_TAG-macos-arm64.gz
             shasum -a 256 cillers-cli-* >> shas.txt
-            echo shas.txt
+            cat shas.txt
 
 workflows:
   build-and-deploy:
